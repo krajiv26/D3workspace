@@ -1,0 +1,38 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>SVG Basics</title>
+</head>
+<body>
+  
+    <div class="canvas">
+        
+    </div>
+
+
+    <!-- Firebase snnipets get from console Develop </>-->
+    <script src="https://www.gstatic.com/firebasejs/5.7.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.7.3/firebase-firestore.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyCwK6ekUCq9XyepWEZNpVOZwA7B5mT5A5I",
+        authDomain: "krajiv26-d3-firebase.firebaseapp.com",
+        databaseURL: "https://krajiv26-d3-firebase.firebaseio.com",
+        projectId: "krajiv26-d3-firebase",
+        storageBucket: "krajiv26-d3-firebase.appspot.com",
+        messagingSenderId: "854080791589"
+      };
+      firebase.initializeApp(config);
+      const db = firebase.firestore();
+      db.settings({ timestampsInSnapshots: true });
+    </script>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
