@@ -1,0 +1,107 @@
+<html>
+  <head>
+    
+    <style>
+       .value-text {
+           font-size: 25px;
+           font-weight: 600;
+       } 
+       .title-text{
+           font-size: 15px;
+           font-weight:600;
+       }
+        
+    </style>
+  </head>
+  <body>
+    <div id="chart"></div>
+    <div id="leg"></div>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+   
+    <script>
+        var data = [
+        {name: "Male", value: 40},
+        {name: "Female", value: 20},
+        ];
+        var text = "";
+
+        var width = 100;
+        var height = 100;
+        var thickness = 5;
+        var duration = 750;
+
+        var radius = Math.min(width, height) / 2;
+        var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+        var svg = d3.select("#chart")
+        .append('svg')
+        .attr('class', 'pie')
+        .attr('width', width)
+        .attr('height', height);
+
+        var g = svg.append('g')
+        .attr('transform', 'translate(' + (width/2) + ',' + (height/2) + ')');
+
+        var arc = d3.arc()
+        .innerRadius(radius - thickness)
+        .outerRadius(radius);
+
+        
+
+        var tots = d3.sum(data, function(d) { 
+            return d.value; 
+        });
+        data.forEach(function(d) {
+            d.percentage = d.value * 100  / tots;
+        });
+        console.log(Math.round(data[0].percentage));
+        var Male = Math.round(data[0].percentage);
+        var pie = d3.pie()
+        .value(function(d) { return d.percentage; })
+        .sort(null);
+
+        var path = g.selectAll('path')
+        .data(pie(data))
+        .enter()
+        .append("g")
+        .append('path')
+        .attr('d', arc)
+        .attr('fill', (d,i) => color(i))
+        .each(function(d, i) { this._current = i; });
+
+        
+
+
+
+        g.append("text")
+                .attr("class", "value-text")
+                .text(`${tots}`)
+                .attr('text-anchor', 'middle')
+                .attr('dy', '.2em');
+
+        g.append('text')
+        .attr("class", "title-text")
+        .attr('text-anchor', 'middle')
+        .text("Total")
+        .attr('dy', '1.4em');
+
+        const colour = d3.scaleOrdinal(d3['schemeSet3'])
+        const legendGroup = d3.select('#leg').append("svg").append("g")
+        .attr('transform', `translate(${width + 40}, 10)`);
+
+        const legend = d3.legendColor()
+                        .shape('circle')
+                        .shapePadding(10)
+                        .scale(color);
+        
+
+            // update colour scale domain
+        colour.domain(data.map(d => d.name));
+
+        // Update and call legend
+        legendGroup.call(legend);
+    </script>
+
+  </body>
+</html>
