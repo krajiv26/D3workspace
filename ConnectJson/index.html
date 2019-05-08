@@ -1,0 +1,33 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+
+d3.json("user.json", function(data) {
+    //console.log("------",data);
+    var mydata = [];
+    data.map( function(x) { 
+        dct = x.city.split(",").map(s => s.trim());
+        dct.forEach(e => {
+            newdata = {};
+            newdata.city = e;
+            newdata.name = x.name;
+            newdata.age = x.age;
+            //console.log(newdata);
+            mydata.push(newdata);
+        });
+    });
+    console.log(mydata);
+    var md = mydata.filter(d => d.city == "Pune" & d.age > 21);
+    console.log(md);
+
+});
+</script>
+</body>
+</html>
