@@ -16,7 +16,7 @@
   stroke-width: 1.5px;
 }
 svg {
-  background: #f0f0f0;
+  background: #7e2222;
 }
 .layer{
     background-image: url(smallico.png);
@@ -39,9 +39,14 @@ svg {
 <div id='stacked-bar'>
     <svg id="mysvg">
         <defs>
-                <pattern id="star" x="5" y="0" width="27" height="30"  patternUnits="userSpaceOnUse">
+                <pattern id="star0" x="6" y="0" width="27" height="30"  patternUnits="userSpaceOnUse">
                         <image xlink:href="smallico.png" width="17" height="30"></image>
-                   <!-- <circle cx="10" cy="10" r="10" stroke="none" fill="#393" /> -->
+                </pattern>
+                <pattern id="star1" x="6" y="0" width="27" height="30"  patternUnits="userSpaceOnUse">
+                  <image xlink:href="smallico.png" width="17" height="30"></image>
+                </pattern>
+                <pattern id="star2" x="6" y="0" width="27" height="30"  patternUnits="userSpaceOnUse">
+                  <image xlink:href="smallico.png" width="17" height="30"></image>
                 </pattern>
             <!-- <pattern id="star" viewBox="0,0,17,30" width="100%" height="100%">
               <polygon points="0,0 2,5 0,10 5,8 10,10 8,5 10,0 5,2"/>
@@ -61,7 +66,8 @@ var initStackedBarChart = {
 		data = config.data,
 		margin = {top: 20, right: 20, bottom: 30, left: 50},
 		parseDate = d3.timeParse("%m/%Y"),
-		width = 960 - margin.left - margin.right,
+		//width = 960 - margin.left - margin.right,
+    width = 500 - margin.left - margin.right,
 		height = 500 - margin.top - margin.bottom,
 		xScale = d3.scaleLinear().rangeRound([0, width]),
 		yScale = d3.scaleBand().rangeRound([height, 0]).padding(0.5),
@@ -111,8 +117,10 @@ var initStackedBarChart = {
 		var layer = svg.selectAll(".layer")
 			.data(layers)
 			.enter()
-            .append("g")
+        .append("g")
 			.attr("class", "layer")
+      .attr("transform", "translate(3,0)")
+      .style("fill",function(d,i){ return "url(#star"+ i +")"})
             
             //.style("background-image","url(smallico.png)")
             //.style("fill","none")
@@ -128,7 +136,7 @@ var initStackedBarChart = {
 			  .attr("height", yScale.bandwidth())
               //.style("stroke-width","2")
               //style("stroke","url(#star)")
-              .style("fill","url(#star)")
+              //.style("fill","url(#star)")
 			  .attr("width", function(d) { return xScale(d[1]) - xScale(d[0]) });
 
 			svg.append("g")
