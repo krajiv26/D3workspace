@@ -69,12 +69,21 @@ var initStackedBarChart = {
 		//width = 960 - margin.left - margin.right,
     width = 500 - margin.left - margin.right,
 		height = 500 - margin.top - margin.bottom,
+    //500-50=450-6.5-20+1 = =422.5
+    //27*9 = 243 + 70 +7.5
+    //27*16 = 432 
 		xScale = d3.scaleLinear().rangeRound([0, width]),
 		yScale = d3.scaleBand().rangeRound([height, 0]).padding(0.5),
 		color = d3.scaleOrdinal(d3.schemeCategory20),
 		xAxis = d3.axisBottom(xScale),
-		yAxis =  d3.axisLeft(yScale).tickFormat(d3.timeFormat("%b")),
-		svg = d3.select("#mysvg")
+		yAxis =  d3.axisLeft(yScale);
+		var picWidth = 17;
+    var picHeight = 30;
+    var picWpadding = 27;
+    //console.log("xscale", (xScale(3)));
+    
+    
+    var svg = d3.select("#mysvg")
 				.attr("width", width + margin.left + margin.right)
 				.attr("height", height + margin.top + margin.bottom)
 				.append("g")
@@ -87,7 +96,7 @@ var initStackedBarChart = {
 		var layers= stack(data);
 			data.sort(function(a, b) { return b.total - a.total; });
 			//yScale.domain(data.map(function(d) { return parseDate(d.date); }));
-            yScale.domain(data.map(function(d) { return d.name; }));
+      yScale.domain(data.map(function(d) { return d.name; }));
 			xScale.domain([0, d3.max(layers[layers.length - 1], function(d) { return d[0] + d[1]; }) ]).nice();
 
 		var layer = svg.selectAll(".layer")
@@ -95,6 +104,7 @@ var initStackedBarChart = {
 			.enter()
         .append("g")
 			.attr("class", "layer")
+      .attr("id",function(d,i){return "lay_"+i})
       .attr("transform", "translate(3,0)")
       //.style("fill", function(d, i) { return color(i); })
       //.style("fill",function(d,i){ return "url(#star"+ i +")"})
@@ -109,21 +119,47 @@ var initStackedBarChart = {
 			  .data(function(d) { 
           //console.log(d)
           return d; })
-			.enter().append("g").append("rect")
+			.enter().append("g")
+        .attr("class",function(d,i,n){ return n[i].parentNode.id})
+        .attr("id",function(d,i,n){ 
+          return n[i].className.baseVal+"grp_"+i})
+          //.attr("fill","#fff")
+        .append("rect")
 			  .attr("y", function(d) { return yScale(d.data.name); })
 			  .attr("x", function(d) { return xScale(d[0]); })
 			  .attr("height", yScale.bandwidth())
               //.style("stroke-width","2")
               //style("stroke","url(#star)")
               //.style("fill","url(#star)")
-			  .attr("width", function(d) { return xScale(d[1]); - xScale(d[0]) })
+        .attr("width", function(d) { return xScale(d[1]) - xScale(d[0]) })
+        .attr("class",function(d) { return (d[1]) - (d[0]) })
         
         layer.selectAll("rect").each(function(d,i,n){
-              console.log(n[i].parentNode);
-              console.log(n[i].width.baseVal.value)
-              p= Math.round(n[i].width.baseVal.value/27)
+              //console.log(n[i].y.baseVal.value);
+              //console.log(n[i].parentNode.id);
+              //console.log(d)
+              //console.log(n[i].className.baseVal)
+              p= n[i].className.baseVal
+              //console.log(p)
+              // picWpadding=Math.round(n[i].width.baseVal.value/p)
+              picWpadding=n[i].width.baseVal.value/p
+              //console.log(n[i])
               for(k=0; k<p;k++){
-                console.log(k);
+                //console.log(k,n[i].y.baseVal.value,n[i].x.baseVal.value + (k*27),p);
+                //console.log()
+                //this.parentNode.html("jjdjjdjjjd")
+                
+                layer.select("#"+n[i].parentNode.id)
+                .append("image")
+                .attr("xlink:href","smallico.png")
+                .attr("x",n[i].x.baseVal.value + (k*picWpadding))
+                .attr("y",n[i].y.baseVal.value)
+                .attr("width",picWpadding)
+                //.attr("preserveAspectRatio","xMidYMid meet")
+                //.attr("viewBox","0 0 100 100")
+                // .attr("height",picHeight)
+                .attr("height",n[i].height.baseVal.value)
+                //preserveAspectRatio="xMidYMid meet"  x="90"  y="0"  viewBox="0 0 100 100"
               }
           })
 
@@ -160,47 +196,63 @@ var data = [{
                 "val1": 3,
                 "val2": 2,
                 "val3":1,
+                "val4":1,
         },
             {
                 "name": "Bananas",
-                "val1": 3,
-                "val2": 3,
-                "val3":3,
+                "val1":6,
+                "val2": 7,
+                "val3":8,
+                "val4":1,
         },
             {
                 "name": "Grapes",
                 "val1": 2,
                 "val2": 2,
                 "val3":2,
+                "val4":1,
         },
             {
                 "name": "Lemons",
                 "val1": 1,
                 "val2":1,
                 "val3":1,
+                "val4":1,
         },
             {
                 "name": "Limes",
                 "val1": 3,
                 "val2": 2,
                 "val3":1,
+                "val4":1,
         },
             {
                 "name": "Oranges",
                 "val1": 3,
                 "val2": 4,
                 "val3":1,
+                "val4":1,
+        },
+        {
+                "name": "Carrot",
+                "val1": 3,
+                "val2": 4,
+                "val3":6,
+                "val4":1,
         },
             {
                 "name": "Pears",
-                "val1": 3,
+                "val1": 4,
                 "val2": 2,
                 "val3":1,
+                "val4":1,
         }];
 
-
+var mx = d3.max(data, d=> d.val1 + d.val2 + d.val3)
+console.log("max:",mx)
 //var key = ["wounds", "other", "disease"];
-var key = ["val1", "val2", "val3"];
+//var key = ["val1", "val2", "val3"];
+var key = ["val1", "val2", "val3","val4"];
 initStackedBarChart.draw({
 	data: data,
 	key: key,

@@ -79,31 +79,7 @@ var initStackedBarChart = {
 				.attr("height", height + margin.top + margin.bottom)
 				.append("g")
 				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-        // var defs = d3.select("#msvg")                                    .append("defs")
-        //                 .append("pattern")
-        //                 .attr("id","star")
-        //                 .attr("x","0")
-        //                 .attr("y","0")
-
-                        //.attr("viewBox","0,0,17,30")
-                        // .attr("width","17")
-                        // .attr("height","100%")
-                        // .attr("viewBox","0,0,17,30")
-                        // .attr("width","100%")
-                        // .attr("height","100%")
-                        // .append("polygon")
-                        // .attr("points","0,0 2,5 0,10 5,8 10,10 8,5 10,0 5,2")
-                        // .append("rect")
-                        // .attr("width","17")
-                        // .attr("height","30")
-                        // .style("fill","skyblue")
-                        // .append("image")
-                        // .attr("xlink:href","smallico.png")
-                        // .attr("width","17")
-                        // .attr("height","30")
-                        // .style("stroke-width","1")
-                        // <image xlink:href="https://mdn.mozillademos.org/files/6457/mdn_logo_only_color.png" height="200" width="200"/>
-		var stack = d3.stack()
+    var stack = d3.stack()
 			.keys(stackKey)
 			/*.order(d3.stackOrder)*/
 			.offset(d3.stackOffsetNone);
@@ -120,7 +96,8 @@ var initStackedBarChart = {
         .append("g")
 			.attr("class", "layer")
       .attr("transform", "translate(3,0)")
-      .style("fill",function(d,i){ return "url(#star"+ i +")"})
+      //.style("fill", function(d, i) { return color(i); })
+      //.style("fill",function(d,i){ return "url(#star"+ i +")"})
             
             //.style("background-image","url(smallico.png)")
             //.style("fill","none")
@@ -129,15 +106,41 @@ var initStackedBarChart = {
     //         background-image: url(smallico.png);
     // background-repeat: repeat-x;
 		  layer.selectAll("rect")
-			  .data(function(d) { return d; })
-			.enter().append("rect")
+			  .data(function(d) { 
+          //console.log(d)
+          return d; })
+			.enter().append("g").append("rect")
 			  .attr("y", function(d) { return yScale(d.data.name); })
 			  .attr("x", function(d) { return xScale(d[0]); })
 			  .attr("height", yScale.bandwidth())
               //.style("stroke-width","2")
               //style("stroke","url(#star)")
               //.style("fill","url(#star)")
-			  .attr("width", function(d) { return xScale(d[1]) - xScale(d[0]) });
+			  .attr("width", function(d) { return xScale(d[1]); - xScale(d[0]) })
+        
+        layer.selectAll("rect").each(function(d,i,n){
+              console.log(n[i].parentNode);
+              console.log(n[i].width.baseVal.value)
+              p= Math.round(n[i].width.baseVal.value/27)
+              for(k=0; k<p;k++){
+                console.log(k);
+              }
+          })
+
+        // layer.selectAll("g")
+        //       .append("image")
+        //       .attr("xlink:href","smallico.png")
+        //       .attr("width",17)
+        //       .attr("height",30)
+        //layer.s
+              
+
+    // var ttimg = layer.selectAll("g")  
+    //     .append("image")
+    //     .attr("xlink:href","smallico.png")
+    //     .attr("width",17)
+    //     .attr("height",30)
+
 
 			svg.append("g")
 			.attr("class", "axis axis--x")
